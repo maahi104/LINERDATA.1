@@ -51,12 +51,6 @@ head = delete_zero_sum_sublists(head)
 print("List after deleting zero-sum sublists:")
 print_list(head)
 
-
-
-# # QUESTION 10
-
-
-
 # # QUESTION 2
 
 class Node:
