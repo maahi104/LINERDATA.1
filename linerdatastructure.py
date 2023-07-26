@@ -1,105 +1,61 @@
 # # QUESTION 1
 
-# A Linked List Node
-class ListNode:
-	def __init__(self, val):
-		self.val = val
-		self.next = None
 
-# Function to create Node
-def getNode(data):
-	temp = ListNode(data)
-	temp.next = None
-	return temp
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
 
-# Function to print the Linked List
-def printList(head):
-	while (head.next):
-		print(head.val, end=' -> ')
-		head = head.next
-	print(head.val, end='')
+def delete_zero_sum_sublists(head):
+    dummy = Node(0)
+    dummy.next = head
+    prefix_sum = 0
+    prefix_sums = {prefix_sum: dummy}
+    while head:
+        prefix_sum += head.data
+        if prefix_sum in prefix_sums:
+            node = prefix_sums[prefix_sum].next
+            sum_to_delete = prefix_sum + node.data
+            while sum_to_delete != prefix_sum:
+                del prefix_sums[sum_to_delete]
+                node = node.next
+                sum_to_delete += node.data
+            prefix_sums[prefix_sum].next = head.next
+        else:
+            prefix_sums[prefix_sum] = head
+        head = head.next
+    return dummy.next
 
-# Function that removes continuous nodes
-# whose sum is K
-def removeZeroSum(head, K):
+def print_list(head):
+    while head:
+        print(head.data, end=' ')
+        head = head.next
+    print()
 
-	# Root node initialise to 0
-	root = ListNode(0)
+# Example usage
+def create_list():
+    head = Node(6)
+    head.next = Node(-6)
+    head.next.next = Node(8)
+    head.next.next.next = Node(4)
+    head.next.next.next.next = Node(-12)
+    head.next.next.next.next.next = Node(9)
+    head.next.next.next.next.next.next = Node(8)
+    return head
 
-	# Append at the front of the given
-	# Linked List
-	root.next = head
+head = create_list()
+print("Original list:")
+print_list(head)
 
-	# Map to store the sum and reference
-	# of the Node
-	umap = dict()
-
-	umap[0] = root
-
-	# To store the sum while traversing
-	sum = 0
-
-	# Traversing the Linked List
-	while (head != None):
-
-		# Find sum
-		sum += head.val
-
-		# If found value with (sum - K)
-		if ((sum - K) in umap):
-
-			prev = umap[sum - K]
-			start = prev
-
-			# Delete all the node
-			# traverse till current node
-			aux = sum
-
-			# Update sum
-			sum = sum - K
-
-			# Traverse till current head
-			while (prev != head):
-				prev = prev.next
-				aux += prev.val
-				if (prev != head):
-					umap.remove(aux)
-
-			# Update the start value to
-			# the next value of current head
-			start.next = head.next
-
-		# If (sum - K) value not found
-		else:
-			umap[sum] = head
-
-		head = head.next
-
-	# Return the value of updated
-	# head node
-	return root.next
+head = delete_zero_sum_sublists(head)
+print("List after deleting zero-sum sublists:")
+print_list(head)
 
 
-# Driver Code
-if __name__ == '__main__':
 
-	# Create Linked List
-	head = getNode(1)
-	head.next = getNode(2)
-	head.next.next = getNode(-3)
-	head.next.next.next = getNode(3)
-	head.next.next.next.next = getNode(1)
+# # QUESTION 10
 
-	# Given sum K
-	K = 5
 
-	# Function call to get head node
-	# of the updated Linked List
-	head = removeZeroSum(head, K)
-
-	# Print the updated Linked List
-	if(head != None):
-		printList(head)
 
 # # QUESTION 2
 
